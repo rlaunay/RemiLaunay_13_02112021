@@ -1,6 +1,6 @@
 import { authActions } from ".";
 import { AppDispatch } from "..";
-import fetchApi from "../../api";
+import fetchApi, { apiClient } from "../../api";
 import { User } from "../../Types/Auth";
 
 type LoginPayload = {
@@ -14,14 +14,15 @@ export function updateUser(accessToken: string | undefined, userInfo: { firstNam
     dispatch(authActions.updateRequest());
 
     try {
-      const reponseProfile = await fetchApi<{ body: User }>('/user/profile', {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(userInfo)
-      });
+      // const reponseProfile = await fetchApi<{ body: User }>('/user/profile', {
+      //   method: 'PUT',
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${accessToken}`,
+      //   },
+      //   body: JSON.stringify(userInfo)
+      // });
+      const reponseProfile = await apiClient.user.update(accessToken, userInfo)
 
       dispatch(authActions.updateSuccess(reponseProfile.body));
       cb();
@@ -36,16 +37,17 @@ export function login({ email, password, remember }: LoginPayload) {
     dispatch(authActions.loginRequest());
 
     try {
-      const reponseLogin = await fetchApi<{ body: { token: string } }>('/user/login', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password
-        })
-      });
+      // const reponseLogin = await fetchApi<{ body: { token: string } }>('/user/login', {
+      //   method: 'POST',
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     email,
+      //     password
+      //   })
+      // });
+      const reponseLogin = await apiClient.user.login(email, password);
 
       if (remember) {
         localStorage.setItem('token', reponseLogin.body.token);
@@ -65,12 +67,13 @@ export const initSession = (token: string) => {
     dispatch(authActions.loginRequest())
     
     try {
-      const responseProfil = await fetchApi<{ body: User }>('/user/profile', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      // const responseProfil = await fetchApi<{ body: User }>('/user/profile', {
+      //   method: 'POST',
+      //   headers: {
+      //     Authorization: `Bearer ${token}`
+      //   }
+      // });
+      const responseProfil = await apiClient.user.getProfil(token);
 
       dispatch(authActions.loginSuccess({
         token,
