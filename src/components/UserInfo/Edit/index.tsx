@@ -23,8 +23,6 @@ const Edit: React.FC<EditProps> = ({ closeEdit, user }) => {
       lastName,
     }, () => {
       closeEdit();
-      setFistName('');
-      setLastName('');
     }))
   }
 
