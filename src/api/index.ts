@@ -33,7 +33,7 @@ class ApiClient extends HttpClient {
   }
 }
 
-export const apiClient = new ApiClient('http://localhost:3001/api/v1', 'fr');
+export const apiClient = new ApiClient(import.meta.env.VITE_API_ENDPOINT_URL, 'en');
 
 
 export default async function fetchApi<T = {}>(endpoint: string, opt: RequestInit): Promise<T> {
