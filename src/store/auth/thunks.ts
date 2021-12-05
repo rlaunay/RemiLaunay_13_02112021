@@ -1,6 +1,6 @@
 import { authActions } from ".";
 import { AppDispatch } from "..";
-import fetchApi, { apiClient } from "../../api";
+import apiClient from "../../api";
 import { User } from "../../Types/Auth";
 
 type LoginPayload = {
